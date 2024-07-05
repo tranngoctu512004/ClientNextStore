@@ -1,22 +1,33 @@
 import { NextResponse } from "next/server";
-// const privatePaths = ["/profile", "/"];
+
+const privatePaths = ["/profile", "/cart"];
 const authPaths = ["/login", "/register"];
-// This function can be marked `async` if using `await` inside
+
 export function middleware(request) {
   const { pathname } = request.nextUrl;
   const sessionToken = request.cookies.get("sessionToken");
-  // console.log(pathname)
-  //check private Path
-  // if (privatePaths.some((path) => pathname.startsWith(path) && !sessionToken)) {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
-  if (authPaths.some((path) => pathname.startsWith(path) && sessionToken)) {
+
+  if (privatePaths.includes(pathname) && !sessionToken) {
+    // Nếu người dùng truy cập vào trang private mà chưa đăng nhập, chuyển hướng đến trang login
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (authPaths.includes(pathname) && sessionToken) {
+    // Nếu người dùng đã đăng nhập nhưng cố gắng truy cập lại trang login hoặc register, chuyển hướng đến trang profile
     return NextResponse.redirect(new URL("/profile", request.url));
   }
+
   return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/login", "/register/", "/profile", "/home", "/about"],
+  matcher: [
+    "/login",
+    "/register",
+    "/profile",
+    "/home",
+    "/about",
+    "/cart",
+    // Thêm các đường dẫn khác tùy vào nhu cầu của ứng dụng
+  ],
 };

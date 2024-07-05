@@ -77,7 +77,7 @@ export default function LoginForm() {
       });
       const responseFromBackend = await resultnextsever.json();
       setSessionToken(responseFromBackend.payload.token);
-      router.push("/");
+      router.back();
     } catch (error) {
       toast({
         title: "Error",

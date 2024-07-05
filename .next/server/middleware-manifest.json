@@ -3,6 +3,7 @@
   "middleware": {
     "/": {
       "files": [
+        "prerender-manifest.js",
         "server/edge-runtime-webpack.js",
         "server/middleware.js"
       ],
@@ -10,13 +11,37 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "^/.*$",
-          "originalSource": "/:path*"
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/login(.json)?[\\/#\\?]?$",
+          "originalSource": "/login"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/register(.json)?[\\/#\\?]?$",
+          "originalSource": "/register"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/profile(.json)?[\\/#\\?]?$",
+          "originalSource": "/profile"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/home(.json)?[\\/#\\?]?$",
+          "originalSource": "/home"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/about(.json)?[\\/#\\?]?$",
+          "originalSource": "/about"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/cart(.json)?[\\/#\\?]?$",
+          "originalSource": "/cart"
         }
       ],
       "wasm": [],
       "assets": [],
-      "environments": {}
+      "environments": {
+        "previewModeId": "8a48ff1ae53927538bfb386c33688d3f",
+        "previewModeSigningKey": "0e02145c4c20a45107fc39dc672c4f8fbe5b62bb5a2d57b34fce94d1985841f7",
+        "previewModeEncryptionKey": "df19e6d78d2f8b1269e72703388e461bc5d7ba35bdf820a17dff91988ddd7a3a"
+      }
     }
   },
   "functions": {},

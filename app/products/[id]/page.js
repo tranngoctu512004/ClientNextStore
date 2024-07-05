@@ -4,13 +4,69 @@ import { useParams } from "next/navigation";
 import envConfig from "@/config";
 import Header from "@/components/header";
 import ImageSliderDetail from "@/components/sliderDetail";
-
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
+import useUser from "../../hooks/useUser";
+import AddToCartModal from "@/components/addtocartmodal";
+import Footer from "@/components/footer";
 export default function DetailProduct() {
   const [product, setProduct] = useState(null);
   const { id } = useParams(); // Lấy id từ params
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  const { user } = useUser();
 
+  const handleCart = async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    if (!selectedColor || !selectedSize) {
+      toast({
+        title: "Warning",
+        description: "Vui lòng chọn màu và kích thước",
+        status: "warning",
+      });
+      return;
+    }
+
+    const { _id: userId } = user;
+    const { _id: productId } = product;
+    const quantity = 1; // Số lượng sản phẩm thêm vào giỏ hàng (có thể thay đổi tùy theo logic của bạn)
+    const color = selectedColor; // Màu sản phẩm được chọn
+    const size = selectedSize; // Kích cỡ sản phẩm được chọn
+
+    try {
+      const response = await fetch(
+        `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/cart/addCart`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, productId, quantity, color, size }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to add product to cart.");
+      }
+
+      // const data = await response.json();
+
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      toast({
+        title: "Failed",
+        description: "Thêm giỏ hàng thất bại",
+        status: "success",
+      });
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,7 +126,7 @@ export default function DetailProduct() {
                 {product.color.map((color) => (
                   <div
                     key={color}
-                    className={`w-8 h-8 rounded-full border border-gray-300 ${color.toLowerCase()} ${selectedColor === color ? "ring-2 ring-red-500" : ""}`}
+                    className={`w-8 h-8  ${color}  rounded-full border border-gray-300 ${selectedColor === color ? "ring-2 ring-red-500" : ""}`}
                     title={color}
                     onClick={() => setSelectedColor(color)}
                   />
@@ -103,22 +159,34 @@ export default function DetailProduct() {
               </p>
             </div>
           )}
-          <text>Hướng dẫn tính size</text>
-          <div className="mt-4">
-            <button className="px-20 border  border-red-500 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out">
-              TÌM SẢN PHẨM TẠI SHOWROOM
-            </button>
-          </div>
-          <div className="mt-4 gap-5">
-            <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
-              Mua ngay
-            </button>
-            <button className="ml-7 px-16 border  border-red-500 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out">
-              Thêm vào giỏ hàng
-            </button>
-          </div>
+          {product && (
+            <>
+              <text>Hướng dẫn tính size</text>
+              <div className="mt-4">
+                <button className="px-20 border  border-red-500 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out">
+                  TÌM SẢN PHẨM TẠI SHOWROOM
+                </button>
+              </div>
+              <div className="mt-4 gap-5">
+                <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
+                  Mua ngay
+                </button>
+                <button
+                  onClick={handleCart}
+                  className="ml-7 px-16 border  border-red-500 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out"
+                >
+                  Thêm vào giỏ hàng
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
+      <AddToCartModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+      <Footer />
     </div>
   );
 }

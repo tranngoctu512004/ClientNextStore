@@ -4,6 +4,8 @@ import Header from "@/components/header";
 import envConfig from "@/config";
 import ImageSlider from "./slider";
 import HomeProduct from "./homeproduct";
+import Footer from "./footer";
+import LoadingOverlay from "./loading";
 
 export default function Main() {
   const [categories, setCategories] = useState([]);
@@ -88,7 +90,7 @@ export default function Main() {
   }, []);
 
   if (loadingCategories || loadingSlides || loadingDiscount) {
-    return <div>Loading...</div>; // Hiển thị thông báo loading nếu đang fetch dữ liệu
+    return <LoadingOverlay />; // Hiển thị thông báo loading nếu đang fetch dữ liệu
   }
 
   return (
@@ -100,6 +102,7 @@ export default function Main() {
       {errorDiscount && <div>{errorDiscount}</div>}
       <HomeProduct product={discountProduct} />
       <HomeProduct product={discountProduct} />
+      <Footer />
     </div>
   );
 }

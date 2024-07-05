@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Headerbar from "@/components/headerbar";
 import ItemProduct from "@/components/itemproduct";
@@ -54,6 +55,7 @@ export default function CategoryCollection() {
           </div>
         ))}
       </div>
+      <Footer />
     </div>
   );
 }

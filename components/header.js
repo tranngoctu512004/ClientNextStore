@@ -68,13 +68,15 @@ const Header = () => {
     >
       <div className="flex justify-between items-center px-4 py-2">
         <div className="w-48 md:w-auto">
-          <Image
-            src="https://mwc.com.vn/Assets/App/images/logo.png"
-            alt="Logo"
-            width={122}
-            height={54}
-            className="object-contain"
-          />
+          <Link href={"/"}>
+            <Image
+              src="https://mwc.com.vn/Assets/App/images/logo.png"
+              alt="Logo"
+              width={122}
+              height={54}
+              className="object-contain"
+            />
+          </Link>
         </div>
 
         <ul className="hidden md:flex flex-row space-x-5">
@@ -110,7 +112,7 @@ const Header = () => {
 
         <div className="flex space-x-5 items-center">
           <SearchBar />
-          <Link href={`/login`}>
+          <Link href={`/profile`}>
             <Image
               src="/images/user.svg"
               alt="User Icon"
@@ -119,12 +121,14 @@ const Header = () => {
             />
           </Link>
           <div>
-            <Image
-              src="/images/shopping-cart.svg"
-              alt="Shopping Cart Icon"
-              width={24}
-              height={24}
-            />
+            <Link href={`/cart`}>
+              <Image
+                src="/images/shopping-cart.svg"
+                alt="Shopping Cart Icon"
+                width={24}
+                height={24}
+              />
+            </Link>
           </div>
         </div>
       </div>

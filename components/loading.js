@@ -1,12 +1,11 @@
-// components/Loading.js
 import React from "react";
 
-const Loading = () => {
+const LoadingOverlay = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-70 z-50 text-xl text-gray-800">
-      Loading...
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-200 bg-opacity-75 z-50">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
     </div>
   );
 };
 
-export default Loading;
+export default LoadingOverlay;
