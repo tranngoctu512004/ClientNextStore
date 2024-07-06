@@ -90,7 +90,7 @@ export default function Main() {
   }, []);
 
   if (loadingCategories || loadingSlides || loadingDiscount) {
-    return <LoadingOverlay />; // Hiển thị thông báo loading nếu đang fetch dữ liệu
+    return <LoadingOverlay />;
   }
 
   return (

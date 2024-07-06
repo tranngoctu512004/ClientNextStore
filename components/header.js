@@ -4,12 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "./searchbar";
 import envConfig from "@/config";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [categories, setCategories] = useState([]);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [errorCategories, setErrorCategories] = useState("");
+  const router = useRouter();
+
+  const handleProfile = () => {
+    router.push("/login");
+  };
 
   const handleMouseEnter = (categoryId) => {
     setHoveredCategory(categoryId);
@@ -112,14 +118,14 @@ const Header = () => {
 
         <div className="flex space-x-5 items-center">
           <SearchBar />
-          <Link href={`/profile`}>
+          <div onClick={handleProfile}>
             <Image
               src="/images/user.svg"
               alt="User Icon"
               width={24}
               height={24}
             />
-          </Link>
+          </div>
           <div>
             <Link href={`/cart`}>
               <Image

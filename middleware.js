@@ -13,7 +13,6 @@ export function middleware(request) {
   }
 
   if (authPaths.includes(pathname) && sessionToken) {
-    // Nếu người dùng đã đăng nhập nhưng cố gắng truy cập lại trang login hoặc register, chuyển hướng đến trang profile
     return NextResponse.redirect(new URL("/profile", request.url));
   }
 

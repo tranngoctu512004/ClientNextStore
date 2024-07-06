@@ -17,7 +17,8 @@ import { Input } from "@/components/ui/input";
 import envConfig from "@/config";
 import { useAppContext } from "@/app/AppProvider";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+
 import Loading from "@/components/loading";
 
 // Define the form schema using Zod
@@ -27,11 +28,12 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const pathname = usePathname();
   const { toast } = useToast();
   const router = useRouter();
   const { setSessionToken } = useAppContext();
   const [loading, setLoading] = useState(false);
-
+  console.log("Current Pathname:", pathname);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,7 +79,7 @@ export default function LoginForm() {
       });
       const responseFromBackend = await resultnextsever.json();
       setSessionToken(responseFromBackend.payload.token);
-      router.back();
+      router.push("/profile");
     } catch (error) {
       toast({
         title: "Error",
