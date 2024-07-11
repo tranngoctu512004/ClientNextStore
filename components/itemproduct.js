@@ -12,12 +12,12 @@ export default function ItemProduct({ item }) {
   };
 
   const navigateToDetailPage = () => {
-    window.location.href = `/products/${item._id}`; // Thay đổi URL khi nhấp chuột
+    window.location.href = `/products/${item._id}`;
   };
 
   return (
     <div
-      className="flex flex-col cursor-pointer"
+      className="flex flex-col cursor-pointer mb-5"
       onClick={navigateToDetailPage}
     >
       <div className="">
@@ -26,13 +26,24 @@ export default function ItemProduct({ item }) {
         )}
       </div>
       <div className="">
-        <div className="flex flex-row items-center mb-2 mt-2">
-          <p className="text-sm font-semibold mr-2">
-            {truncateString(item.name, 20)}
-          </p>
-          <p>-</p>
-          <p className="text-sm font-semibold ml-2">
-            {truncateString(item.attribute, 32)}
+        <div className="grid grid-rows-1 items-center mb-2 mt-2">
+          <p className="text-sm font-semibold mr-2 whitespace-nowrap overflow-hidden text-ellipsis">
+            {/* Hiển thị chuỗi rút gọn theo kích thước màn hình */}
+            <span className="block sm:hidden">
+              {item.name} - {truncateString(item.attribute, 10)}
+            </span>
+            <span className="hidden sm:block md:hidden">
+              {item.name} - {truncateString(item.attribute, 10)}
+            </span>
+            <span className="hidden md:block lg:hidden">
+              {item.name} - {truncateString(item.attribute, 15)}
+            </span>
+            <span className="hidden lg:block xl:hidden">
+              {item.name} - {truncateString(item.attribute, 20)}
+            </span>
+            <span className="hidden xl:block">
+              {item.name} - {truncateString(item.attribute, 25)}
+            </span>
           </p>
         </div>
         <p className="text-black-700 font-bold justify-center flex text-xl">

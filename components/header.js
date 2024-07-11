@@ -11,18 +11,24 @@ const Header = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [errorCategories, setErrorCategories] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openedCategory, setOpenedCategory] = useState(null);
   const router = useRouter();
+
+  const handleOpenSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const handleProfile = () => {
     router.push("/login");
   };
 
-  const handleMouseEnter = (categoryId) => {
-    setHoveredCategory(categoryId);
-  };
-
   const handleMouseLeave = () => {
     setHoveredCategory(null);
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    setOpenedCategory(openedCategory === categoryId ? null : categoryId);
   };
 
   useEffect(() => {
@@ -73,7 +79,16 @@ const Header = () => {
       className={`fixed w-full top-0 z-50 ${scrolled ? "bg-white shadow-lg" : "bg-transparent"}`}
     >
       <div className="flex justify-between items-center px-4 py-2">
-        <div className="w-48 md:w-auto">
+        <div className="lg:hidden" onClick={handleOpenSidebar}>
+          <Image
+            src="/images/menu-burger.svg"
+            alt="Menu"
+            width={24}
+            height={24}
+            className="object-contain"
+          />
+        </div>
+        <div className="md:w-full md:flex md:justify-center lg:w-40">
           <Link href={"/"}>
             <Image
               src="https://mwc.com.vn/Assets/App/images/logo.png"
@@ -85,11 +100,11 @@ const Header = () => {
           </Link>
         </div>
 
-        <ul className="hidden md:flex flex-row space-x-5">
+        <ul className="hidden lg:flex flex-row space-x-5 flex-shrink">
           {categories.map((category) => (
             <li
               key={category._id}
-              onMouseEnter={() => handleMouseEnter(category.cateID)}
+              onMouseEnter={() => handleMouseLeave(category.cateID)}
               onMouseLeave={handleMouseLeave}
             >
               <Link href={`/collection/${category._id}`}>
@@ -116,9 +131,9 @@ const Header = () => {
           ))}
         </ul>
 
-        <div className="flex space-x-5 items-center">
+        <div className="flex items-center lg:flex-shrink-0 space-x-5">
           <SearchBar />
-          <div onClick={handleProfile}>
+          <div onClick={handleProfile} className="">
             <Image
               src="/images/user.svg"
               alt="User Icon"
@@ -127,7 +142,7 @@ const Header = () => {
             />
           </div>
           <div>
-            <Link href={`/cart`}>
+            <Link href={`/cart`} className="w-20">
               <Image
                 src="/images/shopping-cart.svg"
                 alt="Shopping Cart Icon"
@@ -136,6 +151,82 @@ const Header = () => {
               />
             </Link>
           </div>
+        </div>
+      </div>
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-30"
+          onClick={handleOpenSidebar}
+        />
+      )}
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full bg-white shadow-lg z-40 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300`}
+        style={{ width: "66.6667%" }} // 2/3 of the screen
+      >
+        <div className="p-4">
+          {/* <button className="p-2 bg-red-500 text-white mb-4">
+            Close Sidebar
+          </button> */}
+          <div className=" flex justify-center flex-col">
+            <div className="flex flex-row justify-between">
+              <div></div>
+              <h2 className="justify-center flex">Menu</h2>
+              <div className="flex justify-end" onClick={handleOpenSidebar}>
+                <Image
+                  src="/images/angle-small-left.svg"
+                  alt="Shopping Cart Icon"
+                  width={24}
+                  height={24}
+                />
+              </div>
+            </div>
+
+            <div className="w-full h-px bg-gray-400"></div>
+          </div>
+
+          <ul>
+            {categories.map((category) => (
+              <li key={category._id} className="mb-2">
+                <div className=" flex flex-row justify-between font-semibold cursor-pointer hover:text-blue-500 py-2">
+                  <Link
+                    href={`/collection/${category._id}`}
+                    className="w-full h-full"
+                  >
+                    <div>{category.cateName}</div>
+                  </Link>
+                  <div
+                    className="w-10 h-5"
+                    onClick={() => handleCategoryClick(category.cateID)}
+                  >
+                    <Image
+                      src="/images/angle-small-down.svg"
+                      alt="Shopping Cart Icon"
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                </div>
+
+                {category.subCategories.length > 0 &&
+                  openedCategory === category.cateID && (
+                    <ul className="pl-4">
+                      {category.subCategories.map((subCategory) => (
+                        <li key={subCategory._id} className="py-1">
+                          <Link href={`/collection/${subCategory._id}`}>
+                            <span className="text-base text-black-700 hover:text-blue-500 font-semibold">
+                              {subCategory.subcateName}
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </header>

@@ -8,7 +8,7 @@ const HomeProduct = ({ product }) => {
   return (
     <div className="flex flex-col mt-3">
       <h2 className="flex justify-center text-xl">GIÁ ƯU ĐÃI</h2>
-      <div className="flex flex-row mt-5 p-5 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-5 p-5">
         {productsToDisplay.map((item, index) => (
           <ItemProduct key={index} item={item} />
         ))}

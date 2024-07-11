@@ -15,8 +15,8 @@ const ImageSliderDetail = ({ slides }) => {
       <Swiper
         spaceBetween={50}
         slidesPerView={1}
-        navigation
-        // pagination={{ clickable: true }}
+        // navigation
+        pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         modules={[Pagination, Navigation, Autoplay]}
       >

@@ -103,24 +103,30 @@ export default function DetailProduct() {
   return (
     <div className="flex flex-col">
       <Header />
-
-      <div className="flex flex-row mt-20 p-5">
-        <div className="w-2/4">
+      <div className="flex flex-col mt-20 p-5 md:flex-row">
+        <div className="w-full md:w-1/2">
           {product && <ImageSliderDetail slides={product.image} />}
         </div>
 
-        <div className="ml-8">
+        <div className="md:ml-4">
           {product && (
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center mt-3">
               <text className="flex flex-row items-center">
-                <p className="text-xl font-bold">{product.name}</p>
-                <p className="text-xl mx-2">-</p>
-                <p className="text-xl font-bold">{product.attribute}</p>
+                <p className="text-xl font-bold">
+                  {product.name} - {product.attribute}
+                </p>
               </text>
             </div>
           )}
           {product && (
-            <div className="mb-4 mt-8">
+            <div className="mt-4 mb-3">
+              <p className="text-2xl font-bold text-red-600">
+                {product.price.toLocaleString("vi-VN")} đ
+              </p>
+            </div>
+          )}
+          {product && (
+            <div className="mt-2 hidden md:block ">
               <p className="text-lg font-bold">Color</p>
               <div className="flex gap-4 mt-2">
                 {product.color.map((color) => (
@@ -134,54 +140,90 @@ export default function DetailProduct() {
               </div>
             </div>
           )}
-
           {product && (
-            <div className="mb-4 mt-8">
+            <div className="mt-2 hidden md:block ">
               <p className="text-lg font-bold">Size</p>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-2 mt-2 justify-start">
                 {product.size.map((size) => (
                   <button
                     key={size}
-                    className={`border border-gray-300 rounded-md py-2 px-4 mx-2 text-lg ${selectedSize === size ? "border-red-500 text-red-500" : "border-gray-300 text-black"} hover:bg-gray-100 focus:outline-none`}
+                    className={`border border-gray-300 rounded-md px-4 py-3 text-lg ${selectedSize === size ? "border-red-500 text-red-500" : "border-gray-300 text-black"} hover:bg-gray-100 focus:outline-none`}
                     onClick={() => setSelectedSize(size)}
                   >
-                    {size}
+                    <h5 className="text-sm">{size}</h5>
                   </button>
                 ))}
               </div>
             </div>
           )}
 
+          <text>Hướng dẫn tính size</text>
+          <div className="mt-4 mx-2">
+            <button className="w-full  border  border-red-500 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out">
+              TÌM SẢN PHẨM TẠI SHOWROOM
+            </button>
+          </div>
+
+          <div className="hidden md:flex flex-row justify-between my-2  ">
+            <button className="bg-red-500 w-full mx-2 text-white  py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
+              Mua ngay
+            </button>
+            <button
+              onClick={handleCart}
+              className=" w-full border  border-red-500 mx-2 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out"
+            >
+              Thêm vào giỏ hàng
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="w-full fixed bottom-0 bg-white shadow-lg z-50 flex flex-col px-2 md:hidden">
+        <div className="flex flex-row justify-between">
           {product && (
-            <div className="mb-4">
-              <p className="text-lg font-bold text-black">
-                {product.price.toLocaleString("vi-VN")}đ
-              </p>
+            <div className="mt-2">
+              {/* <p className="text-lg font-bold">Color</p> */}
+              <div className="flex gap-4 mt-2">
+                {product.color.map((color) => (
+                  <div
+                    key={color}
+                    className={`w-8 h-8  ${color}  rounded-full border border-gray-300 ${selectedColor === color ? "ring-2 ring-red-500" : ""}`}
+                    title={color}
+                    onClick={() => setSelectedColor(color)}
+                  />
+                ))}
+              </div>
             </div>
           )}
           {product && (
-            <>
-              <text>Hướng dẫn tính size</text>
-              <div className="mt-4">
-                <button className="px-20 border  border-red-500 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out">
-                  TÌM SẢN PHẨM TẠI SHOWROOM
-                </button>
+            <div className="mt-2">
+              {/* <p className="text-lg font-bold">Size</p> */}
+              <div className="flex flex-wrap gap-2 mt-2 justify-start">
+                {product.size.map((size) => (
+                  <button
+                    key={size}
+                    className={`border border-gray-300 rounded-md p-1 text-lg ${selectedSize === size ? "border-red-500 text-red-500" : "border-gray-300 text-black"} hover:bg-gray-100 focus:outline-none`}
+                    onClick={() => setSelectedSize(size)}
+                  >
+                    <h5 className="text-sm">{size}</h5>
+                  </button>
+                ))}
               </div>
-              <div className="mt-4 gap-5">
-                <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
-                  Mua ngay
-                </button>
-                <button
-                  onClick={handleCart}
-                  className="ml-7 px-16 border  border-red-500 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out"
-                >
-                  Thêm vào giỏ hàng
-                </button>
-              </div>
-            </>
+            </div>
           )}
         </div>
+        <div className="flex flex-row justify-between my-2">
+          <button className="bg-red-500 w-full mx-2 text-white  py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
+            Mua ngay
+          </button>
+          <button
+            onClick={handleCart}
+            className=" w-full border  border-red-500 mx-2 text-red-500 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 ease-in-out"
+          >
+            Thêm vào giỏ hàng
+          </button>
+        </div>
       </div>
+
       <AddToCartModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

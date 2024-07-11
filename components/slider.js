@@ -14,7 +14,6 @@ const ImageSlider = ({ slides }) => {
       <Swiper
         spaceBetween={50}
         slidesPerView={1}
-        navigation
         // pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         modules={[Pagination, Navigation, Autoplay]}
@@ -28,7 +27,7 @@ const ImageSlider = ({ slides }) => {
                 src={slide.image}
                 alt="Slide Image"
                 width={1920}
-                height={1080} // adjust this to the actual aspect ratio of your images
+                height={1080}
                 className="object-cover w-full h-full"
               />
             </a>
