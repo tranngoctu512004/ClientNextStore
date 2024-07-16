@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ItemProduct from "./itemproduct"; // Đảm bảo đúng tên component import vào
-
+import ItemProduct from "./itemproduct";
 const HomeProduct = ({ product }) => {
   const productsToDisplay = product.slice(0, 4);
 

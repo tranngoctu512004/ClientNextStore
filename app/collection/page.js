@@ -34,14 +34,12 @@ export default function Collection() {
     fetchData();
   }, []);
   return (
-    <div className="flex flex-col">
+    <div className="grid grid-cols-1">
       <Header />
       <Headerbar />
-      <div className="flex flex-wrap justify-center mt-5 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-5 p-5">
         {products.map((item, index) => (
-          <div key={index} className="w-1/5">
-            <ItemProduct item={item} />
-          </div>
+          <ItemProduct key={index} item={item} />
         ))}
       </div>
     </div>

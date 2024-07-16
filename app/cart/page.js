@@ -45,7 +45,7 @@ export default function CartPage() {
   return (
     <div>
       <Header />
-      <div className="px-48 pt-32">
+      <div className=" px-5 pt-24 lg:mx-36">
         <text>Trang chủ | Giỏ hàng</text>
         <CartCompo cart={cart} />
         <Footer />

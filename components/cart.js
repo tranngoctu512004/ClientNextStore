@@ -148,21 +148,21 @@ const CartCompo = ({ cart }) => {
   };
 
   return (
-    <div className="mt-5">
-      <div className="grid grid-cols-12 gap-4 p-5">
+    <div className="mt-5 ">
+      <div className="hidden lg:grid grid-cols-12 gap-4 p-5">
         <div className="col-span-5">
           <p>Sản phẩm</p>
         </div>
         <div className="col-span-2">
           <p>Đơn giá</p>
         </div>
-        <div className="col-span-1">
+        <div className="col-span-2">
           <p>Số lượng</p>
         </div>
-        <div className="col-span-2 ml-8">
+        <div className="col-span-2">
           <p>Số tiền</p>
         </div>
-        <div className="col-span-2">
+        <div className="col-span-1">
           <p>Thao tác</p>
         </div>
       </div>
@@ -172,15 +172,16 @@ const CartCompo = ({ cart }) => {
           {cartState.items.map((item) => (
             <div
               key={item._id}
-              className="grid grid-cols-12 gap-4 items-center border-b border-gray-300 py-4"
+              className="flex flex-col gap-4 shadow-lg px-2 py-4 lg:grid lg:grid-cols-12"
             >
-              <div className="col-span-5 flex items-center">
-                <div className="w-40 h-40 relative">
+              <div className="flex items-center lg:col-span-5">
+                <div className="col-span-4">
                   <Image
                     src={item.productId.image[0]}
                     alt={item.productId.name}
-                    layout="fill"
                     objectFit="cover"
+                    width={128}
+                    height={128}
                   />
                 </div>
                 <div className="ml-2">
@@ -190,47 +191,49 @@ const CartCompo = ({ cart }) => {
                       70,
                     )}
                   </p>
+                  <div className="flex flex-row items-center mt-2 w-full">
+                    <p className="text-gray-600 text-sm">
+                      Màu sắc: {item.color}
+                    </p>
+                    <p className="text-gray-600 ml-2 text-sm">
+                      Kích cỡ: {item.size}
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="col-span-2">
+
+              <div className=" w-54 mt-2 lg:col-span-2">
                 <p className="text-gray-600">
                   {item.productId.price.toLocaleString()} VND
                 </p>
               </div>
-              <div className="col-span-1 flex items-center mr-8">
+              <div className=" flex lg:col-span-2 mt-2">
                 <button
                   onClick={() => handleDecreaseQuantity(item)}
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-l focus:outline-none"
+                  className="bg-gray-200 text-gray-700 w-8 h-8 rounded-l focus:outline-none"
                 >
                   -
                 </button>
-                <p className="text-gray-600 mx-2">{item.quantity}</p>
+                <p className="text-gray-600 mx-3 my-1">{item.quantity}</p>
                 <button
                   onClick={() => handleIncreaseQuantity(item)}
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-r focus:outline-none"
+                  className="bg-gray-200 text-gray-700 w-8 h-8 rounded-r focus:outline-none"
                 >
                   +
                 </button>
               </div>
-
-              <div className="col-span-2 ml-5">
-                <p className="text-gray-600">
+              <div className=" mt-2 lg:col-span-2">
+                <p className="text-lg text-red-500 font-bold">
                   {(item.productId.price * item.quantity).toLocaleString()} VND
                 </p>
               </div>
-              <div className="col-span-2">
+              <div className="">
                 <button
                   onClick={() => handleRemoveFromCart(item)}
-                  className="bg-red-500 text-white px-3 py-1 rounded"
+                  className="bg-red-500 text-white px-3 py-1 rounded m-2"
                 >
                   Xóa
                 </button>
-              </div>
-              <div className="col-span-12 flex flex-row items-center ml-5 w-full">
-                <p className="text-gray-600 text-sm">Màu sắc: {item.color}</p>
-                <p className="text-gray-600 ml-2 text-sm">
-                  Kích cỡ: {item.size}
-                </p>
               </div>
             </div>
           ))}

@@ -11,7 +11,7 @@ const DropdownBox = ({ options, onSelect }) => {
   };
 
   return (
-    <div className="inline-block relative">
+    <div className="inline-block relative ">
       <select
         value={selectedOption}
         onChange={handleChange}

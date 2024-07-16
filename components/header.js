@@ -4,27 +4,49 @@ import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "./searchbar";
 import envConfig from "@/config";
+import AuthModal from "./AuthModal";
+import useUser from "../app/hooks/useUser";
 import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [categories, setCategories] = useState([]);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [errorCategories, setErrorCategories] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openedCategory, setOpenedCategory] = useState(null);
+  const { user } = useUser();
   const router = useRouter();
 
+  const handleOpenAuthModal = () => {
+    if (user) {
+      router.push("/profile");
+    } else {
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleOpenCart = () => {
+    if (user) {
+      router.push("/cart");
+    } else {
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleCloseAuthModal = () => {
+    setShowAuthModal(false);
+  };
   const handleOpenSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleProfile = () => {
-    router.push("/login");
-  };
-
   const handleMouseLeave = () => {
     setHoveredCategory(null);
+  };
+  const handleCategoryHover = (categoryId) => {
+    setHoveredCategory(categoryId);
   };
 
   const handleCategoryClick = (categoryId) => {
@@ -78,6 +100,7 @@ const Header = () => {
     <header
       className={`fixed w-full top-0 z-50 ${scrolled ? "bg-white shadow-lg" : "bg-transparent"}`}
     >
+      {showAuthModal && <AuthModal onClose={handleCloseAuthModal} />}
       <div className="flex justify-between items-center px-4 py-2">
         <div className="lg:hidden" onClick={handleOpenSidebar}>
           <Image
@@ -104,7 +127,7 @@ const Header = () => {
           {categories.map((category) => (
             <li
               key={category._id}
-              onMouseEnter={() => handleMouseLeave(category.cateID)}
+              onMouseEnter={() => handleCategoryHover(category.cateID)}
               onMouseLeave={handleMouseLeave}
             >
               <Link href={`/collection/${category._id}`}>
@@ -133,7 +156,7 @@ const Header = () => {
 
         <div className="flex items-center lg:flex-shrink-0 space-x-5">
           <SearchBar />
-          <div onClick={handleProfile} className="">
+          <div onClick={handleOpenAuthModal}>
             <Image
               src="/images/user.svg"
               alt="User Icon"
@@ -141,15 +164,13 @@ const Header = () => {
               height={24}
             />
           </div>
-          <div>
-            <Link href={`/cart`} className="w-20">
-              <Image
-                src="/images/shopping-cart.svg"
-                alt="Shopping Cart Icon"
-                width={24}
-                height={24}
-              />
-            </Link>
+          <div onClick={handleOpenCart}>
+            <Image
+              src="/images/shopping-cart.svg"
+              alt="Shopping Cart Icon"
+              width={24}
+              height={24}
+            />
           </div>
         </div>
       </div>

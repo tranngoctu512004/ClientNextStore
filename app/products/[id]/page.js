@@ -4,24 +4,27 @@ import { useParams } from "next/navigation";
 import envConfig from "@/config";
 import Header from "@/components/header";
 import ImageSliderDetail from "@/components/sliderDetail";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import useUser from "../../hooks/useUser";
 import AddToCartModal from "@/components/addtocartmodal";
 import Footer from "@/components/footer";
+import AuthModal from "@/components/AuthModal";
 export default function DetailProduct() {
   const [product, setProduct] = useState(null);
   const { id } = useParams(); // Lấy id từ params
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { toast } = useToast();
   const { user } = useUser();
 
+  const handleCloseAuthModal = () => {
+    setShowAuthModal(false);
+  };
   const handleCart = async () => {
     if (!user) {
-      router.push("/login");
+      setShowAuthModal(true);
       return;
     }
     if (!selectedColor || !selectedSize) {
@@ -103,6 +106,7 @@ export default function DetailProduct() {
   return (
     <div className="flex flex-col">
       <Header />
+      {showAuthModal && <AuthModal onClose={handleCloseAuthModal} />}
       <div className="flex flex-col mt-20 p-5 md:flex-row">
         <div className="w-full md:w-1/2">
           {product && <ImageSliderDetail slides={product.image} />}
