@@ -6,6 +6,7 @@ module.exports = {
     "./app/**/*.{js,jsx}",
     "./src/**/*.{js,jsx}",
   ],
+  darkMode: "class",
   prefix: "",
   theme: {
     container: {
