@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  next-store-client:
+    image: trantu30950/next-store-client:latest
+    build: .
+    container_name: next-store-client
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./.env:/app/.env
