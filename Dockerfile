@@ -1,30 +1,30 @@
-# Giai đoạn xây dựng
+# Sử dụng Node.js làm hình ảnh cơ sở
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Sao chép các file package.json và package-lock.json
+# Sao chép file package.json và package-lock.json
 COPY package*.json ./
 
-# Cài đặt tất cả các phụ thuộc, bao gồm các phụ thuộc phát triển để xây dựng ứng dụng
+# Cài đặt tất cả các phụ thuộc
 RUN npm install
 
-# Sao chép toàn bộ mã nguồn vào thư mục làm việc
+# Sao chép mã nguồn ứng dụng
 COPY . .
 
 # Xây dựng ứng dụng Next.js
 RUN npm run build
 
-# Giai đoạn chạy
+# Tạo một giai đoạn mới cho việc chạy ứng dụng
 FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Cài đặt các phụ thuộc chỉ cần thiết cho môi trường production
+# Chỉ cài đặt các phụ thuộc cần thiết cho môi trường production
 COPY package*.json ./
 RUN npm install --production
 
-# Sao chép các file cần thiết từ giai đoạn xây dựng
+# Sao chép ứng dụng đã xây dựng từ giai đoạn builder
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 
