@@ -1,13 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "./searchbar";
 import envConfig from "@/config";
-import AuthModal from "./AuthModal";
 import useUser from "../app/hooks/useUser";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
+const AuthModal = dynamic(() => import("./AuthModal"), { ssr: false });
 const Header = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -27,6 +28,8 @@ const Header = () => {
     }
   };
 
+  console.log(errorCategories);
+
   const handleOpenCart = () => {
     if (user) {
       router.push("/cart");
@@ -45,6 +48,7 @@ const Header = () => {
   const handleMouseLeave = () => {
     setHoveredCategory(null);
   };
+
   const handleCategoryHover = (categoryId) => {
     setHoveredCategory(categoryId);
   };
@@ -94,7 +98,8 @@ const Header = () => {
     fetchData();
   }, []);
 
-  console.log(errorCategories);
+  // Memoize the categories list
+  const memoizedCategories = useMemo(() => categories, [categories]);
 
   return (
     <header
@@ -124,7 +129,7 @@ const Header = () => {
         </div>
 
         <ul className="hidden lg:flex flex-row space-x-5 flex-shrink">
-          {categories.map((category) => (
+          {memoizedCategories.map((category) => (
             <li
               key={category._id}
               onMouseEnter={() => handleCategoryHover(category.cateID)}
@@ -188,9 +193,6 @@ const Header = () => {
         style={{ width: "66.6667%" }} // 2/3 of the screen
       >
         <div className="p-4">
-          {/* <button className="p-2 bg-red-500 text-white mb-4">
-            Close Sidebar
-          </button> */}
           <div className=" flex justify-center flex-col">
             <div className="flex flex-row justify-between">
               <div></div>
@@ -209,7 +211,7 @@ const Header = () => {
           </div>
 
           <ul>
-            {categories.map((category) => (
+            {memoizedCategories.map((category) => (
               <li key={category._id} className="mb-2">
                 <div className=" flex flex-row justify-between font-semibold cursor-pointer hover:text-blue-500 py-2">
                   <Link

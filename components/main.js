@@ -8,21 +8,24 @@ import Footer from "./footer";
 import LoadingOverlay from "./loading";
 
 export default function Main() {
-  const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
-  const [errorCategories, setErrorCategories] = useState("");
-
-  const [slides, setSlides] = useState([]);
-  const [loadingSlides, setLoadingSlides] = useState(true);
-  const [errorSlides, setErrorSlides] = useState("");
-
-  const [discountProduct, setDiscountProduct] = useState([]);
-  const [loadingDiscount, setLoadingDiscount] = useState(true);
-  const [errorDiscount, setErrorDiscount] = useState("");
+  const [data, setData] = useState({
+    categories: [],
+    slides: [],
+    discountProduct: [],
+  });
+  const [loading, setLoading] = useState({
+    categories: true,
+    slides: true,
+    discountProduct: true,
+  });
+  const [error, setError] = useState({
+    categories: "",
+    slides: "",
+    discountProduct: "",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(categories);
       try {
         const [categoriesResponse, slidesResponse, discountResponse] =
           await Promise.all([
@@ -50,58 +53,63 @@ export default function Main() {
             ),
           ]);
 
-        const categoriesData = await categoriesResponse.json();
-        const slidesData = await slidesResponse.json();
-        const discountData = await discountResponse.json();
-
         if (!categoriesResponse.ok) {
-          throw new Error(
-            categoriesData.error || "Failed to fetch categories.",
-          );
+          throw new Error("Failed to fetch categories.");
         }
         if (!slidesResponse.ok) {
-          throw new Error(slidesData.error || "Failed to fetch slides.");
+          throw new Error("Failed to fetch slides.");
         }
         if (!discountResponse.ok) {
-          throw new Error(
-            discountData.error || "Failed to fetch discount products.",
-          );
+          throw new Error("Failed to fetch discount products.");
         }
 
-        setCategories(categoriesData);
-        setSlides(slidesData);
-        setDiscountProduct(discountData);
+        const [categoriesData, slidesData, discountData] = await Promise.all([
+          categoriesResponse.json(),
+          slidesResponse.json(),
+          discountResponse.json(),
+        ]);
 
-        setLoadingCategories(false);
-        setLoadingSlides(false);
-        setLoadingDiscount(false);
+        setData({
+          categories: categoriesData,
+          slides: slidesData,
+          discountProduct: discountData,
+        });
+        setLoading({
+          categories: false,
+          slides: false,
+          discountProduct: false,
+        });
       } catch (error) {
-        setErrorCategories(error.message || "Failed to fetch categories.");
-        setErrorSlides(error.message || "Failed to fetch slides.");
-        setErrorDiscount(error.message || "Failed to fetch discount products.");
-
-        setLoadingCategories(false);
-        setLoadingSlides(false);
-        setLoadingDiscount(false);
+        setError((prev) => ({
+          ...prev,
+          categories: error.message,
+          slides: error.message,
+          discountProduct: error.message,
+        }));
+        setLoading({
+          categories: false,
+          slides: false,
+          discountProduct: false,
+        });
       }
     };
 
     fetchData();
   }, []);
 
-  if (loadingCategories || loadingSlides || loadingDiscount) {
+  if (loading.categories || loading.slides || loading.discountProduct) {
     return <LoadingOverlay />;
   }
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col">
       <Header />
-      <ImageSlider slides={slides} />
-      {errorCategories && <div>{errorCategories}</div>}
-      {errorSlides && <div>{errorSlides}</div>}
-      {errorDiscount && <div>{errorDiscount}</div>}
-      <HomeProduct product={discountProduct} />
-      <HomeProduct product={discountProduct} />
+      <ImageSlider slides={data.slides} />
+      {error.categories && <div>{error.categories}</div>}
+      {error.slides && <div>{error.slides}</div>}
+      {error.discountProduct && <div>{error.discountProduct}</div>}
+      <HomeProduct product={data.discountProduct} />
+      <HomeProduct product={data.discountProduct} />
       <Footer />
     </div>
   );

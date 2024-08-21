@@ -8,7 +8,6 @@ export function middleware(request) {
   const sessionToken = request.cookies.get("sessionToken");
 
   if (privatePaths.includes(pathname) && !sessionToken) {
-    // Nếu người dùng truy cập vào trang private mà chưa đăng nhập, chuyển hướng đến trang login
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -20,13 +19,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: [
-    "/login",
-    "/register",
-    "/profile",
-    "/home",
-    "/about",
-    "/cart",
-    // Thêm các đường dẫn khác tùy vào nhu cầu của ứng dụng
-  ],
+  matcher: ["/login", "/register", "/profile", "/home", "/about", "/cart"],
 };

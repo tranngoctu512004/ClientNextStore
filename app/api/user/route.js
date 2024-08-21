@@ -18,7 +18,7 @@ export async function GET(request) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionToken.value}`,
+          Cookie: `sessionToken=${sessionToken.value}`,
         },
       },
     );
